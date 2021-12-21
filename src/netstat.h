@@ -3,12 +3,6 @@
 #include <string>
 #include <vector>
 
-enum class IP_TYPE
-{
-    IPV4 = 1,
-    IPV6
-};
-
 enum class TCP_STATE
 {
     TCP_ESTABLISHED = 1,
@@ -25,20 +19,19 @@ enum class TCP_STATE
 };
 
 static const char *tcp_state[] =
-{
-    "",
-    "ESTABLISHED",
-    "SYN_SENT",
-    "SYN_RECV",
-    "FIN_WAIT1",
-    "FIN_WAIT2",
-    "TIME_WAIT",
-    "CLOSE",
-    "CLOSE_WAIT",
-    "LAST_ACK",
-    "LISTEN",
-    "CLOSING"
-};
+    {
+        "",
+        "ESTABLISHED",
+        "SYN_SENT",
+        "SYN_RECV",
+        "FIN_WAIT1",
+        "FIN_WAIT2",
+        "TIME_WAIT",
+        "CLOSE",
+        "CLOSE_WAIT",
+        "LAST_ACK",
+        "LISTEN",
+        "CLOSING"};
 
 struct info_node
 {
@@ -48,9 +41,12 @@ struct info_node
     int local_port = 0;
     int remote_port = 0;
 
-    IP_TYPE ip_type = IP_TYPE::IPV4;
+    // AF_INET AF_INET6
+    int family = 2;
     int proto = 256;
+    // IPPROTO_TCP IPPROTO_UDP
     std::string tcp_stat;
+    std::string udp_stat;
 
     int key;
 };
@@ -68,12 +64,5 @@ typedef std::vector<info_node> netstat_infos;
 class NetStat
 {
 public:
-    netstat_infos GetInfo(const check_param &param);
-private:
-    void get_tcp_info(netstat_infos &infos);
-    void get_tcp6_info(netstat_infos &infos);
-
-    void get_udp_info(netstat_infos &infos);
-    void get_udp6_info(netstat_infos &infos);
+    static netstat_infos GetInfo(const check_param &param);
 };
-
